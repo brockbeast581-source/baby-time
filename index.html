@@ -221,21 +221,27 @@ Happy 18th Birthday, Aarthi 🎂✨. No matter how many years pass, I will alway
 </section>
 
 <script>
-/* ===== Audio Start ===== */
 const startBtn = document.getElementById('startBtn');
 const bgAudio = document.getElementById('bgAudio');
 
+/* ===== Page Navigation Function ===== */
+function nextPage(num){
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const newPage = document.getElementById('page'+num);
+  newPage.classList.add('active');
+
+  // Apply typewriter to new page's headings/text
+  newPage.querySelectorAll('.typewriter').forEach(el => typewriterWord(el, 150));
+}
+
+/* ===== Start Button ===== */
 startBtn.addEventListener('click', () => {
     bgAudio.muted = false; // allow sound
     bgAudio.play().catch(err => console.log(err));
+
+    // Switch to page 2
     nextPage(2);
 });
-
-/* ===== Page Navigation ===== */
-function nextPage(num){
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page'+num).classList.add('active');
-}
 
 /* ===== Typewriter Effect (word by word) ===== */
 function typewriterWord(el, speed=100){
@@ -253,24 +259,30 @@ function typewriterWord(el, speed=100){
   typeWord();
 }
 
-// Apply typewriter to all elements with class typewriter
-document.querySelectorAll('.typewriter').forEach(el => typewriterWord(el, 150));
+// Initialize typewriter on first page only
+document.querySelectorAll('.page.active .typewriter').forEach(el => typewriterWord(el, 150));
 
 /* ===== Slideshow Manual ===== */
 let slideIndex = 0;
 const slides = document.querySelectorAll('.slide');
-const captions = document.querySelectorAll('.slide .caption');
 
 function showSlide(n){
   slides.forEach(s => s.style.display="none");
   slides[n].style.display="flex";
+
   // Caption typewriter word by word
   const captionEl = slides[n].querySelector('.caption');
   const text = captionEl.getAttribute('data-text');
   captionEl.innerText="";
   const words = text.split(" ");
   let i=0;
-  function typeCaption(){ if(i<words.length){ captionEl.innerText += (i===0?"":" ") + words[i]; i++; setTimeout(typeCaption, 150); } }
+  function typeCaption(){ 
+    if(i<words.length){ 
+      captionEl.innerText += (i===0?"":" ") + words[i]; 
+      i++; 
+      setTimeout(typeCaption, 150); 
+    } 
+  }
   typeCaption();
 }
 
